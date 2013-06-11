@@ -1,0 +1,16 @@
+<%= form_for(@plot) do |f| %>
+  <div class="field">
+    <%= f.hidden_field :user_id, {:value => current_user.id} %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :desc %><br />
+    <%= f.text_field :desc %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save", {:class => ["btn","btn-primary"]} %>
+  </div>
+<% end %>

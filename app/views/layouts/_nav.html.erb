@@ -1,13 +1,12 @@
-<div id="user_nav">
+<%= link_to "Plotlets", root_path, :class => 'brand' %>
+<ul class="nav">
   <% if current_user %>
-    Logged in as <%= current_user.email %>.
-    <%= link_to "Log out", logout_path %>
+    <li class="link">logged in as <strong><%= current_user.email %></strong></li>
+    <li><%= link_to "plots", plots_path %></li>
+    <li><%= link_to "account", {controller: "users", action: "edit", id: current_user.id} %></li>
+    <li><%= link_to "logout", logout_path %></li>
   <% else %>
-    <%= link_to "Sign up", signup_path %> or
-    <%= link_to "log in", login_path %>
+    <li><%= link_to "signup", signup_path %></li>
+    <li><%= link_to "login", login_path %></li>
   <% end %>
-</div>
-
-<% flash.each do |name, msg| %>
-  <%= content_tag :div, msg, :id => "flash_#{name}" %>
-<% end %>
+</ul>

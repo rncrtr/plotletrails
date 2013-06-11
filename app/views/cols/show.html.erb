@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Plot:</b>
+  <%= @col.plot_id %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @col.title %>
+</p>
+
+<p>
+  <b>Ord:</b>
+  <%= @col.ord %>
+</p>
+
+
+<%= link_to 'Edit', edit_col_path(@col) %> |
+<%= link_to 'Back', cols_path %>

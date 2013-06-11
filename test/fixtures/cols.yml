@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  plot_id: 1
+  title: MyString
+  ord: 1
+
+two:
+  plot_id: 1
+  title: MyString
+  ord: 1
