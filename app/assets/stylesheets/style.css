@@ -1,0 +1,52 @@
+.clear{clear: both;}
+.app-title{float: left; width: 70px; font-size: 14px; font-weight: bold; margin: 2px 0px; padding: 0px; line-height: 1.3em;}
+#nav{float: left;}
+.page-title{font-size: 24px; margin: 20px 0 10px 0;}
+.plot-label{float: left;}
+#plot-title{float: left; margin-top: -20px; font-size: 18px; font-weight: bold;}
+
+/* styles */
+.pointer{cursor: pointer;}
+
+
+/* colors */
+.blue{background-color: #6495ED;}
+.green{background-color: #458B00;}
+.orange{background-color: #FF7F24;}
+.red{background-color: #DC143C;}
+.yellow{background-color: #FFB90F;}
+.purple{background-color: #8B008B;}
+.special-right-border{height: 20px; border-right: 1px solid #CCCCCC; margin-top: 0px; margin-bottom: 0px; padding: 5px 5px 0px 0px;}
+/* main */
+h1,h2,h3{line-height: 1.3em;}
+.container{float:left; padding-left: 30px;}
+.rnd5{-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;}
+.rnd5top{-webkit-border-radius: 5px 5px 0 0; -moz-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0;}
+.rnd5bottom{-webkit-border-radius: 0 0 5px 5px; -moz-border-radius: 0 0 5px 5px; border-radius: 0 0 5px 5px;}
+.cols{margin-left: 10px;}
+.col{width: 220px; float: left;}
+.col-ctrl{float: right; margin-top: 10px; border: 0px solid #CCCCCC; width: 100%;}
+.col-ctrl .col-left{float: left;}
+.col-ctrl .col-left{float: left; margin: 0 auto;}
+.col-ctrl .col-right{float: right; padding-left: 5px; padding-right: 0px; margin-top: 0px;}
+.col-ctrl .col-move-left{float: left; padding: 0px 3px 0px 3px; margin-top: 0px; border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC;}
+.col-ctrl .col-move-right{float: left; padding: 0px 3px 0px 3px; margin-top: 0px; border: 1px solid #CCCCCC;}
+.col-ctrl .col-edit{float: left; padding-right: 5px;}
+.col-ctrl .col-add{float: left; padding: 0px 5px 0px 0px;}
+.col-ctrl .col-del{float: left; padding: 0px 10px 0px 5px;}
+.col-body{clear: both; padding-top: 5px; border-right: 1px solid #CCCCCC; min-height: 600px;}
+	.col-title{margin-left: 10px; font-weight: bold; outline: none; border: 0px;}
+	.col-title textarea{font-size: 14px; line-height: 1.3em; font-weight: bold; outline: none; border: 1px; padding: 0px; margin: 0px; overflow: hidden; resize: none; box-shadow: none;}
+
+.cards{min-height: 50px; padding-top: 5px; margin-left: 10px;}
+.card{margin-right: 15px; margin-top: 10px; width: 200px;}
+.card:first-child{margin-top: 0px;}
+	.card-add-ctrl{text-align: center; margin-right: 10px; margin-top: 10px;}
+	.card-ctrl .ctrl-left{float: left; padding-left: 5px; margin-top: 0px;}
+	.card-ctrl .card-title{color: #FFFFFF; font-size: 12px; width: 130px; margin-left: 0px;}
+	.card-ctrl .ctrl-right{float: right; padding-right: 0px; margin-top: 0px; width: 17px;}
+	.card-ctrl .card-del{float: left; padding-right: 5px; margin-top: 0px;}
+	.card-ctrl .card-move{float: left; padding-right: 0px;}
+	.card-text{outline: none; font-size: 12px; height: 100%; line-height: 1.3em; clear: both; border-left: 1px solid #cccccc; border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; }
+	.card-text textarea{width: 188px; font-size: 12px; line-height: 1.3em; outline: none; overflow: hidden; resize: none; padding: 5px 3px 0px 5px; border: 0px solid blue; margin: 0px; box-shadow: none;}
+	.card-add-btn{margin-top: 20px;}

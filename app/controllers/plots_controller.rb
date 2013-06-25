@@ -41,7 +41,6 @@ class PlotsController < ApplicationController
   # POST /plots.json
   def create
     @plot = Plot.new(params[:plot])
-
     respond_to do |format|
       if @plot.save
         format.html { redirect_to @plot, notice: 'Plot was successfully created.' }

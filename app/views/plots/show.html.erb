@@ -1,6 +1,3 @@
 <p id="notice"><%= notice %></p>
-<p>
-  <b>Title:</b>
-  <%= @plot.title %>
-</p>
-<%= render partial: "cols/list" %>
+<span id="plot-title" data-plot="<%= @plot.id %>"><%= @plot.title %></span>
+<%= render partial: "cols/list", :locals => {:cols => Col.find_all_by_plot_id(@plot.id)} %>

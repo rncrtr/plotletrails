@@ -25,9 +25,9 @@ class ColsController < ApplicationController
   # GET /cols/new.json
   def new
     @col = Col.new
-
+    
     respond_to do |format|
-      format.html # new.html.erb
+      format.html {render :layout => false}
       format.json { render json: @col }
     end
   end
@@ -44,7 +44,7 @@ class ColsController < ApplicationController
 
     respond_to do |format|
       if @col.save
-        format.html { redirect_to @col, notice: 'Col was successfully created.' }
+        format.html { render html: @col, layout: "ajax"}
         format.json { render json: @col, status: :created, location: @col }
       else
         format.html { render action: "new" }

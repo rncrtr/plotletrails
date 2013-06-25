@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  col_id: 1
+  text: MyString
+  color_id: 1
+  ord: 1
+
+two:
+  col_id: 1
+  text: MyString
+  color_id: 1
+  ord: 1

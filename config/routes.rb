@@ -1,17 +1,19 @@
 Plotletrails::Application.routes.draw do
+  resources :colors
+
+
+  resources :cards
   resources :cols
-
-
   resources :plots
-
+  resources :users
+  resources :sessions
 
   get "logout" => "sessions#destroy", as: "logout"
   get "login" => "sessions#new", as: "login"
   get "signup" => "users#new", as: "signup"
   match "users/:id/edit" => "users#edit"
   root to: "users#new"
-  resources :users
-  resources :sessions
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,5 +1,20 @@
-<h1>New col</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Back', cols_path %>
+<div class="col">
+	<div class="col-ctrl">
+		<div class="col-left">
+			<div class="col-move-left pointer"><i class="icon-chevron-left"></i></div>
+			<div class="col-del pointer"><i class="icon-trash"></i></div>
+		</div>
+		<div class="col-right">
+			<div class="col-add pointer"><i class="icon-plus"></i></div>
+	        <div class="col-move-right pointer"><i class="icon-chevron-right"></i></div>
+    	</div>
+	</div>
+	<div class="col-body">
+		<div class="col-title"><%= text_area_tag "" %></div>
+		<div class="cards ui-sortable">
+		</div>
+		<div class="card-add-ctrl">
+			<%= link_to '<i class="icon-plus icon-white"></i> Card'.html_safe, {:controller => 'cards',:action => 'new'}, :remote => true, :class => ['action-add-card','btn','btn-primary','btn-small'] %>
+		</div>
+	</div>
+</div>
