@@ -16,14 +16,33 @@
 
 
 $(document).ready(function(){
+/* Staging Column */
+$('.action-add-staging').click(function(){
+	// finish code to add staging column with ord = 0
+	var plotid = $('#plot-title').attr('data-plot');
+	var ord = 0;
+	var req = '';
+	req = req + 'col[ord]='+ord;
+	req = req + '&col[plot_id]='+plotid;
+	req = req + '&col[title]=Staging';
+	$.post('/cols.json',req,function(resp){
+		console.log(resp);
+		window.location.reload();
+	});
+});
+
 /* Column Functions */
 	$('.col-add').click(function(){
-		var col = parseInt($(this).closest('.col').attr('data-col')) + 1;
+		var col = $(this).closest('.col').attr('data-col');
+		var newcol = col + 1;
+		var ord = $('.cols .col').index($('.col[data-col='+col+']'));
+		var neword = ord + 1;
 		var plotid = $('#plot-title').attr('data-plot');
+
 		var req = '';
-		req = req + 'col[ord]='+col;
+		req = req + 'col[ord]='+neword;
 		req = req + '&col[plot_id]='+plotid;
-		req = req + '&col[title]=Column '+col;
+		req = req + '&col[title]=Column '+neword;
 		$.get('/cols/new',req,function(resp){
 			$('.cols').append(resp);
 			console.log(resp);

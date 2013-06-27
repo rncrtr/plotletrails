@@ -10,12 +10,11 @@
 				<div class="ctrl-right">
 					<div class="card-move pointer"><i class="icon-move icon-white"></i></div>
 				</div>
-
 			</div>
 			<div class="card-text rnd5bottom"><%= text_area_tag "", card.text %></div>
 		</div>
 	<% end %>
 </div>
 <div class="card-add-ctrl">
-	<%= link_to '<i class="icon-plus icon-white"></i> Card'.html_safe, {:controller => 'cards',:action => 'new', :col=> 1}, :remote => true, :class => ['action-add-card','btn','btn-primary','btn-small'] %>
+	<%= link_to '<i class="icon-plus icon-white"></i> Card'.html_safe, {:controller => 'cards',:action => 'new'}, :remote => true, :class => ['action-add-card','btn','btn-primary','btn-small'] %>
 </div>

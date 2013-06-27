@@ -1,12 +1,14 @@
-<%= link_to "Plotlets", root_path, :class => 'brand' %>
-<ul class="nav">
-  <% if current_user %>
-    <li class="link">logged in as <strong><%= current_user.email %></strong></li>
-    <li><%= link_to "plots", plots_path %></li>
-    <li><%= link_to "account", {controller: "users", action: "edit", id: current_user.id} %></li>
-    <li><%= link_to "logout", logout_path %></li>
-  <% else %>
-    <li><%= link_to "signup", signup_path %></li>
-    <li><%= link_to "login", login_path %></li>
-  <% end %>
-</ul>
+<div class="nav-bar">
+	<div class="app-title"><%= link_to "Plotlets", root_path, :class => 'brand' %></div>
+	<ul class="nav">
+	  <% if current_user %>
+	    <li class="link"><strong><%= current_user.email %></strong></li>
+	    <li><%= link_to "plots", plots_path %></li>
+	    <li><%= link_to "account", {controller: "users", action: "edit", id: current_user.id} %></li>
+	    <li><%= link_to "logout", logout_path %></li>
+	  <% else %>
+	    <li><%= link_to "signup", signup_path %></li>
+	    <li><%= link_to "login", login_path %></li>
+	  <% end %>
+	</ul>
+</div>

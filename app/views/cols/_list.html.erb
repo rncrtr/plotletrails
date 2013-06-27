@@ -1,35 +1,50 @@
 <!-- cols/list -->
-<div class="row">
-	<div class="cols span12">
-		<div class="col" data-col="0">
-			<div class="col-ctrl">
-				<div class="col-left"></div>
-				<div class="col-right">
-					<div class="col-add pointer special-right-border"><i class="icon-plus"></i></div>
-				</div>
-			</div>
-			<div class="col-body">
-				<div class="col-title">Staging</div>
-				<%= render :partial => "cards/list", :locals => {:cards => Card.find_all_by_col_id(0)} %>
-			</div>
-		</div>
+<div class="row-fluid">
 		<% cols.each do |col| %>
-		<div class="col" data-col="<%= col.id %>">
-			<div class="col-ctrl">
-				<div class="col-left">
-					<div class="col-move-left pointer"><i class="icon-chevron-left"></i></div>
-					<div class="col-del pointer"><i class="icon-trash"></i></div>
+			<% if col.ord==0 %>
+			<!-- staging -->
+			<div class="staging">
+				<div class="col" data-col="<%= col.id %>">
+					<div class="col-ctrl">
+						<div class="col-left"></div>
+						<div class="col-right">
+							<div class="col-add pointer special-right-border"><i class="icon-plus"></i></div>
+						</div>
+					</div>
+					<div class="col-body">
+						<div class="col-title">Staging</div>
+						<%= render :partial => "cards/list", :locals => {:cards => Card.find_all_by_col_id(col.id)} %>
+					</div>
 				</div>
-				<div class="col-right">
-					<div class="col-add pointer"><i class="icon-plus"></i></div>
-			        <div class="col-move-right pointer"><i class="icon-chevron-right"></i></div>
-		    	</div>
 			</div>
-			<div class="col-body">
-				<div class="col-title"><%= text_area_tag "", col.title %></div>
-				<%= render :partial => "cards/list", :locals => {:cards => Card.find_all_by_col_id(col.id)} %>
+			<div class="viewport">
+				<div class="scroller">
+					<div class="cols">
+			<% else %>
+					<div class="col" data-col="<%= col.id %>">
+						<div class="col-ctrl">
+							<div class="col-left">
+								<div class="col-move-left pointer"><i class="icon-chevron-left"></i></div>
+								<div class="col-del pointer"><i class="icon-trash"></i></div>
+							</div>
+							<div class="col-right">
+								<div class="col-add pointer"><i class="icon-plus"></i></div>
+						        <div class="col-move-right pointer"><i class="icon-chevron-right"></i></div>
+					    	</div>
+						</div>
+						<div class="col-body">
+							<div class="col-title"><%= text_area_tag "", col.title %></div>
+							<%= render :partial => "cards/list", :locals => {:cards => Card.find_all_by_col_id(col.id)} %>
+						</div>
+					</div>
+			<% end %>
+		<% end %>
+		<% unless cols.blank? %>
+		<!-- viewport and scroller, only if there are cols -->
 			</div>
 		</div>
+		</div>
+		<% else %>
+			<%= render partial: "cols/first" %>
 		<% end %>
-	</div>
 </div>
