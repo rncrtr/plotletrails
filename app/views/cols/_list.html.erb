@@ -4,7 +4,7 @@
 			<% if col.ord==0 %>
 			<!-- staging -->
 			<div class="staging">
-				<div class="col" data-col="<%= col.id %>">
+				<div class="col" data-col="<%= col.id %>" data-ord="<%= col.ord %>">
 					<div class="col-ctrl">
 						<div class="col-left"></div>
 						<div class="col-right">
@@ -21,19 +21,19 @@
 				<div class="scroller">
 					<div class="cols">
 			<% else %>
-					<div class="col" data-col="<%= col.id %>">
+					<div class="col" data-col="<%= col.id %>" data-ord="<%= col.ord %>">
 						<div class="col-ctrl">
 							<div class="col-left">
-								<div class="col-move-left pointer"><i class="icon-chevron-left"></i></div>
-								<div class="col-del pointer"><i class="icon-trash"></i></div>
+								<div class="col-move-left pointer"><i class="icon-chevron-left righttip" data-title="move column left"></i></div>
+								<div class="col-del pointer"><i class="icon-trash righttip" data-title="delete column"></i></div>
 							</div>
 							<div class="col-right">
-								<div class="col-add pointer"><i class="icon-plus"></i></div>
-						        <div class="col-move-right pointer"><i class="icon-chevron-right"></i></div>
+								<div class="col-add pointer"><i class="icon-plus righttip" data-title="add column"></i></div>
+						        <div class="col-move-right pointer"><i class="icon-chevron-right righttip" data-title="move column right"></i></div>
 					    	</div>
 						</div>
 						<div class="col-body">
-							<div class="col-title"><%= text_area_tag "", col.title %></div>
+							<div class="col-title bottomtip" data-title="click title to edit"><%= text_area_tag "", col.title %></div>
 							<%= render :partial => "cards/list", :locals => {:cards => Card.find_all_by_col_id(col.id)} %>
 						</div>
 					</div>

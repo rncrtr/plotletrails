@@ -12,10 +12,17 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap-tooltip
 //= require_tree .
 
 
 $(document).ready(function(){
+/* tooltip */
+$('.toptip').tooltip({placement: 'top', delay: { show: 1500, hide: 100 }});
+$('.righttip').tooltip({placement: 'right', delay: { show: 1500, hide: 100 }});
+$('.bottomtip').tooltip({placement: 'bottom', delay: { show: 1500, hide: 100 }});
+$('.lefttip').tooltip({placement: 'left', delay: { show: 1500, hide: 100 }});
+
 /* Staging Column */
 $('.action-add-staging').click(function(){
 	// finish code to add staging column with ord = 0
@@ -35,22 +42,46 @@ $('.action-add-staging').click(function(){
 	$('.col-add').click(function(){
 		var col = $(this).closest('.col').attr('data-col');
 		var newcol = col + 1;
-		var ord = $('.cols .col').index($('.col[data-col='+col+']'));
+		var ord = $(this).closest('.col').attr('data-ord');
+		//console.log('ord: '+ord);
 		var neword = ord + 1;
 		var plotid = $('#plot-title').attr('data-plot');
 
 		var req = '';
 		req = req + 'col[ord]='+neword;
 		req = req + '&col[plot_id]='+plotid;
-		req = req + '&col[title]=Column '+neword;
+		req = req + '&col[title]=Column Title';
 		$.get('/cols/new',req,function(resp){
-			$('.cols').append(resp);
-			console.log(resp);
+			if(ord==0){
+				$('.cols .col:first-child').before(resp);
+				console.log('ord was 0 so I am loading this before');
+			}else{
+				$('.col[data-col='+col+']').after(resp);
+				console.log('ord was not 0 so I am loading this after');
+			}
+			//console.log(resp);
 		});
 		$.post('/cols.json',req,function(resp){
-			//$('.cols').append(resp);
-			console.log(resp);
-			// need to add code to inject data
+			if(ord==0){
+				$('.cols .col:first-child').attr('data-col',resp.id);
+				$('.cols .col:first-child').find('.col-title textarea').html(resp.title);
+				$('.cols .col:first-child').attr('data-ord',resp.ord);
+			}else{
+				$('.col[data-col='+col+']').next().attr('data-col',resp.id);
+				$('.col[data-col='+col+']').next().find('.col-title textarea').html(resp.title);
+				$('.col[data-col='+col+']').next().attr('data-ord',resp.ord);
+			}
+			updateColSortOrder('.cols');
+		});
+		return false;
+	});
+
+// col delete
+	$(document).on('click','.col-del',function(){
+		var col = $(this).closest('.col');
+		var colid = $(this).closest('.col').attr('data-col');
+		$.post('/cols/'+colid,'_method=delete',function(){
+			col.closest('.col').remove();
 		});
 		return false;
 	});
@@ -94,20 +125,32 @@ $('.action-add-staging').click(function(){
 
 	      	// update all target ords
 	      	var sortparent = $('.card[data-card='+cardid+']').closest('.cards');
-	      	var ord = 0;
-	      	updateCardSortOrder(sortparent,ord);
+	      	updateCardSortOrder(sortparent);
 
 	      	// update source col ords
 	      	var oldcol = $('.card[data-card='+cardid+']').attr('data-thiscol');
 	      	console.log(oldcol);
-	      	var ord = 0;
-	      	updateCardSortOrder('.col[data-col='+oldcol+'] .cards',ord);
+	      	updateCardSortOrder('.col[data-col='+oldcol+'] .cards');
 			$('.card[data-card='+cardid+']').attr('data-thiscol',col);
 	      }
 	});
 	$( ".cards" ).disableSelection();
 
-	function updateCardSortOrder(parent,ord){
+	function updateColSortOrder(parent){
+		var ord = 1;
+		$(parent).children('.col').each(function(){
+			colid = $(this).attr('data-col');
+			req = '';
+			req = req + 'col[ord]='+ord;
+			req = req + '&_method=put';
+			//console.log('sortingord: '+ord);
+			$.post('/cols/'+colid,req);
+			ord = ord + 1;
+		});
+	}
+
+	function updateCardSortOrder(parent){
+		var ord = 0;
 		$(parent).children('.card').each(function(){
 			cardid = $(this).attr('data-card');
 			req = '';
@@ -143,7 +186,7 @@ $('.action-add-staging').click(function(){
 	$('.action-delete-card').click(function(){
 		var card = $(this).closest('.card');
 		var cardid = $(this).closest('.card').attr('data-card');
-		console.log(cardid);
+		//console.log(cardid);
 		$.post('/cards/'+cardid,'_method=delete',function(){
 			card.closest('.card').remove();
 		});
