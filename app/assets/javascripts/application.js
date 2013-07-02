@@ -17,6 +17,18 @@
 
 
 $(document).ready(function(){
+/*dynamic "viewport" */
+	
+	/* width */
+	var window_w = $(window).width();
+	var viewportwidth = window_w - 220;
+	$('.viewport').css('width',viewportwidth);
+	
+	/* height */
+	var window_h = $(window).height();
+	var viewportheight = window_h - 100;
+	$('.viewport').css('height',viewportheight);
+
 /* tooltip */
 $('.toptip').tooltip({placement: 'top', delay: { show: 1500, hide: 100 }});
 $('.righttip').tooltip({placement: 'right', delay: { show: 1500, hide: 100 }});
@@ -39,7 +51,9 @@ $('.action-add-staging').click(function(){
 });
 
 /* Column Functions */
-	$('.col-add').click(function(){
+	$('.col[data-ord=1] .col-ctrl .col-move-left').hide();
+
+	$(document).on('click','.col-add',function(){
 		var col = $(this).closest('.col').attr('data-col');
 		var newcol = col + 1;
 		var ord = $(this).closest('.col').attr('data-ord');
@@ -78,11 +92,23 @@ $('.action-add-staging').click(function(){
 
 // col delete
 	$(document).on('click','.col-del',function(){
-		var col = $(this).closest('.col');
-		var colid = $(this).closest('.col').attr('data-col');
-		$.post('/cols/'+colid,'_method=delete',function(){
-			col.closest('.col').remove();
-		});
+		smoke.confirm('Delete this column? Are you sure?',function(e){
+			if(e){
+				var col = $(this).closest('.col');
+				var colid = $(this).closest('.col').attr('data-col');
+				$.post('/cols/'+colid,'_method=delete',function(){
+					col.closest('.col').remove();
+				});
+				// TODO: if cards.count is greater than 0
+				smoke.confirm('Should all cards be moved to staging or deleted?',function(f){
+					if(f){
+						console.log('move cards to staging');
+					}else{
+						console.log('delete cards');
+					}
+				},{ok: 'Move Cards to Staging',cancel: "Delete Cards"});
+			}
+		},{cancel: 'Keep it',ok: 'Delete it'});
 		return false;
 	});
 
@@ -101,6 +127,36 @@ $('.action-add-staging').click(function(){
 				}
 			}, 3000 );
 		}
+	});
+
+	/* column move left */
+	$(document).on('click','.col-move-left',function(){
+		var colid = $(this).closest('.col').attr('data-col');
+		console.log('colid: '+colid);
+		var colobj = $('.col[data-col='+colid+']');
+		var prevcol = $('.col[data-col='+colid+']').prev();
+		console.log('prev: '+prevcol.attr('data-col'));
+		$(prevcol).before(colobj);
+		updateColSortOrder('.cols');
+		$('.col .col-ctrl .col-move-left').each(function(){
+			$(this).show();
+		});
+		$('.col[data-ord=1] .col-ctrl .col-move-left').hide();
+	});
+
+	/* column move right */
+	$(document).on('click','.col-move-right',function(){
+		var colid = $(this).closest('.col').attr('data-col');
+		console.log('colid: '+colid);
+		var colobj = $('.col[data-col='+colid+']');
+		var nextcol = $('.col[data-col='+colid+']').next();
+		console.log('prev: '+nextcol.attr('data-col'));
+		$(nextcol).after(colobj);
+		updateColSortOrder('.cols');
+		$('.col .col-ctrl .col-move-left').each(function(){
+			$(this).show();
+		});
+		$('.col[data-ord=1] .col-ctrl .col-move-left').hide();
 	});
 
 /* Card Functions */
@@ -143,6 +199,7 @@ $('.action-add-staging').click(function(){
 			req = '';
 			req = req + 'col[ord]='+ord;
 			req = req + '&_method=put';
+			$(this).attr('data-ord',ord);
 			//console.log('sortingord: '+ord);
 			$.post('/cols/'+colid,req);
 			ord = ord + 1;
@@ -184,12 +241,16 @@ $('.action-add-staging').click(function(){
 
 	// delete card
 	$('.action-delete-card').click(function(){
-		var card = $(this).closest('.card');
-		var cardid = $(this).closest('.card').attr('data-card');
-		//console.log(cardid);
-		$.post('/cards/'+cardid,'_method=delete',function(){
-			card.closest('.card').remove();
-		});
+		smoke.confirm('Delete this card? Are you sure?',function(e){
+			if(e){
+				var card = $(this).closest('.card');
+				var cardid = $(this).closest('.card').attr('data-card');
+				//console.log(cardid);
+				$.post('/cards/'+cardid,'_method=delete',function(){
+					card.closest('.card').remove();
+				});
+			}
+		},{cancel: 'Keep it',ok: 'Delete it'});
 		return false;
 	});
 
