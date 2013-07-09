@@ -17,8 +17,8 @@
 
 
 $(document).ready(function(){
-/*dynamic "viewport" */
-	
+
+/*dynamic "viewport" */	
 	/* width */
 	var window_w = $(window).width();
 	var viewportwidth = window_w - 220;
@@ -28,6 +28,26 @@ $(document).ready(function(){
 	var window_h = $(window).height();
 	var viewportheight = window_h - 100;
 	$('.viewport').css('height',viewportheight);
+
+	// whenever window resizes
+	$(window).resize(function () {
+		/* width */
+		var window_w = $(window).width();
+		var viewportwidth = window_w - 220;
+		$('.viewport').css('width',viewportwidth);
+		
+		/* height */
+		var window_h = $(window).height();
+		var viewportheight = window_h - 100;
+		$('.viewport').css('height',viewportheight);
+	});
+
+	// horizontal scroll with mousewheel
+	$('.viewport').mousewheel(function(e, delta) {
+	    this.scrollLeft -= (delta * 30); // TODO: 30 needs to be a user pref setting
+		e.preventDefault();
+	});
+
 
 /* tooltip */
 $('.toptip').tooltip({placement: 'top', delay: { show: 1500, hide: 100 }});
@@ -53,6 +73,7 @@ $('.action-add-staging').click(function(){
 /* Column Functions */
 	$('.col[data-ord=1] .col-ctrl .col-move-left').hide();
 
+	/* Column Add/Update */
 	$(document).on('click','.col-add',function(){
 		var col = $(this).closest('.col').attr('data-col');
 		var newcol = col + 1;
@@ -70,7 +91,7 @@ $('.action-add-staging').click(function(){
 				$('.cols .col:first-child').before(resp);
 				console.log('ord was 0 so I am loading this before');
 			}else{
-				$('.col[data-col='+col+']').after(resp);
+				$('.col[data-ord='+ord+']').after(resp);
 				console.log('ord was not 0 so I am loading this after');
 			}
 			//console.log(resp);
@@ -92,21 +113,18 @@ $('.action-add-staging').click(function(){
 
 // col delete
 	$(document).on('click','.col-del',function(){
-		smoke.confirm('Delete this column? Are you sure?',function(e){
+		var card_del_obj = this;
+		smoke.confirm('Delete this column? Are you sure? Any cards will be moved to staging so you don\'t lose any ideas.',function(e){
 			if(e){
-				var col = $(this).closest('.col');
-				var colid = $(this).closest('.col').attr('data-col');
+				var col = $(card_del_obj).closest('.col');
+				var colid = $(col).attr('data-col');
 				$.post('/cols/'+colid,'_method=delete',function(){
 					col.closest('.col').remove();
 				});
-				// TODO: if cards.count is greater than 0
-				smoke.confirm('Should all cards be moved to staging or deleted?',function(f){
-					if(f){
-						console.log('move cards to staging');
-					}else{
-						console.log('delete cards');
-					}
-				},{ok: 'Move Cards to Staging',cancel: "Delete Cards"});
+				var cardcount = $(col).find('.cards').children('.card').length;
+				if(cardcount > 0){
+
+				}
 			}
 		},{cancel: 'Keep it',ok: 'Delete it'});
 		return false;
