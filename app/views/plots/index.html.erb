@@ -1,12 +1,11 @@
 <h2>Plots</h2>
 <%= link_to 'New Plot', new_plot_path(:user_id => current_user.id) %>
 <ul class="plots">
-<% @plots.each do |plot| %>
-<li>
-    <%= plot.title %> -
-    <em><%= plot.desc %></em>
-    <%= link_to 'view', plot %>
-    <%= link_to 'delete', plot, method: :delete, data: { confirm: 'Are you sure?' } %>
-</li>
-<% end %>
+	<% @plots.each do |plot| %>
+		<li class="plot-item">
+		    <div class="plot-item-title"><%= link_to plot.title, plot %></div>
+		    <div class="plot-item-desc"><%= plot.desc %></div>
+		    <span class="plot-item-ctrl"><%# link_to 'delete', plot, method: :delete, data: { confirm: 'Are you sure?' } %></span>
+		</li>
+	<% end %>
 </ul>

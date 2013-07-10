@@ -15,13 +15,22 @@ a{color: #0094FF;}
 a:hover{text-decoration: underline;}
 a:visited{color: #0094FF;}
 .btn, .btn:visited, .btn:active{color: #FFF !important;}
+
 /* colors */
-.blue{background-color: #6495ED;}
-.green{background-color: #458B00;}
-.orange{background-color: #FF7F24;}
 .red{background-color: #DC143C;}
+.orange{background-color: #FF7F24;}
 .yellow{background-color: #FFB90F;}
+.green{background-color: #458B00;}
+.blue{background-color: #6495ED;}
 .purple{background-color: #8B008B;}
+.pink{background-color: #FF00FF;}
+.gray{background-color: #C0C0C0;}
+
+/* plots */
+.plots{margin: 0px;}
+	.plot-item{list-style: none; margin-top: 20px;}
+	.plot-item-title{font-size: 24px; line-height: 1.3em;}
+	.plot-item-desc{font-style: italic;}
 
 /* nav */
 .nav-bar{background: #000; width: 100%; height: 40px; position: fixed;}
@@ -36,7 +45,7 @@ h1,h2,h3{line-height: 1.3em;}
 .special-right-border{height: 20px; border-right: 1px solid #CCCCCC; margin-top: 0px; margin-bottom: 0px; padding: 5px 5px 0px 0px;}
 .container{margin-top: 40px; float: left; width: 100% !important;}
 .content{margin: 0px 10px;}
-.staging{float: left; width: 20%; position: absolute; z-index: 999;}
+.staging{float: left; width: 200px; position: absolute; z-index: 999;}
 .staging .col{width: 220px; z-index: 999;}
 .viewport{float: left; width: 80%; position: absolute; margin-left: 210px; overflow: auto; white-space: nowrap;}
 .scroller{width: 1000%; min-width: 1000%;}
@@ -65,9 +74,12 @@ h1,h2,h3{line-height: 1.3em;}
 	.card-add-ctrl{text-align: center; margin-right: 10px; margin-top: 10px;}
 	.card-ctrl .ctrl-left{float: left; padding-left: 5px; margin-top: 0px;}
 	.card-ctrl .card-title{color: #FFFFFF; font-size: 12px; width: 130px; margin-left: 0px;}
-	.card-ctrl .ctrl-right{float: right; padding-right: 0px; margin-top: 0px; width: 17px;}
+	.card-ctrl .ctrl-right{float: right; padding-right: 0px; margin-top: 0px; width: 30px;}
 	.card-ctrl .card-del{float: left; padding-right: 5px; margin-top: 0px;}
+	.card-ctrl .card-color{float: left;}
 	.card-ctrl .card-move{float: left; padding-right: 0px;}
 	.card-text{outline: none; font-size: 12px; height: 100%; line-height: 1.3em; clear: both; border-left: 1px solid #cccccc; border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; }
 	.card-text textarea{width: 188px; font-size: 12px; line-height: 1.3em; outline: none; overflow: hidden; resize: none; padding: 5px 3px 0px 5px; border: 0px solid blue; margin: 0px; box-shadow: none;}
 	.card-add-btn{margin-top: 20px;}
+	.card-colors{height: 20px; margin-left: 30px; display: none;}
+	.card-color-item{float: left; width: 15px; height: 15px; margin: 0px 2px; border: 1px solid #FFF;}

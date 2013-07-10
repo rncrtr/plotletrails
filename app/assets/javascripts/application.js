@@ -17,7 +17,7 @@
 
 
 $(document).ready(function(){
-
+makeSortable();
 /*dynamic "viewport" */	
 	/* width */
 	var window_w = $(window).width();
@@ -78,7 +78,6 @@ $('.action-add-staging').click(function(){
 		var col = $(this).closest('.col').attr('data-col');
 		var newcol = col + 1;
 		var ord = $(this).closest('.col').attr('data-ord');
-		//console.log('ord: '+ord);
 		var neword = ord + 1;
 		var plotid = $('#plot-title').attr('data-plot');
 
@@ -89,24 +88,24 @@ $('.action-add-staging').click(function(){
 		$.get('/cols/new',req,function(resp){
 			if(ord==0){
 				$('.cols .col:first-child').before(resp);
-				console.log('ord was 0 so I am loading this before');
+				//console.log('ord was 0 so I am loading this before');
 			}else{
 				$('.col[data-ord='+ord+']').after(resp);
-				console.log('ord was not 0 so I am loading this after');
+				//console.log('ord was not 0 so I am loading this after');
 			}
-			//console.log(resp);
-		});
-		$.post('/cols.json',req,function(resp){
-			if(ord==0){
-				$('.cols .col:first-child').attr('data-col',resp.id);
-				$('.cols .col:first-child').find('.col-title textarea').html(resp.title);
-				$('.cols .col:first-child').attr('data-ord',resp.ord);
-			}else{
-				$('.col[data-col='+col+']').next().attr('data-col',resp.id);
-				$('.col[data-col='+col+']').next().find('.col-title textarea').html(resp.title);
-				$('.col[data-col='+col+']').next().attr('data-ord',resp.ord);
-			}
-			updateColSortOrder('.cols');
+			$.post('/cols.json',req,function(resp){
+				if(ord==0){
+					$('.cols .col:first-child').attr('data-col',resp.id);
+					$('.cols .col:first-child').find('.col-title textarea').html(resp.title);
+					$('.cols .col:first-child').attr('data-ord',resp.ord);
+				}else{
+					$('.col[data-col='+col+']').next().attr('data-col',resp.id);
+					$('.col[data-col='+col+']').next().find('.col-title textarea').html(resp.title);
+					$('.col[data-col='+col+']').next().attr('data-ord',resp.ord);
+				}
+				updateColSortOrder('.cols');
+				makeSortable();
+			});
 		});
 		return false;
 	});
@@ -114,19 +113,34 @@ $('.action-add-staging').click(function(){
 // col delete
 	$(document).on('click','.col-del',function(){
 		var card_del_obj = this;
-		smoke.confirm('Delete this column? Are you sure? Any cards will be moved to staging so you don\'t lose any ideas.',function(e){
+		smoke.confirm('Delete this column? Are you sure? Any cards will be moved to staging for safe keeping.',function(e){
 			if(e){
 				var col = $(card_del_obj).closest('.col');
 				var colid = $(col).attr('data-col');
+				var stagingcolid = $('.col[data-ord=0]').attr('data-col');
 				$.post('/cols/'+colid,'_method=delete',function(){
 					col.closest('.col').remove();
 				});
+				var cards = $(col).find('.cards').children('.card');
 				var cardcount = $(col).find('.cards').children('.card').length;
 				if(cardcount > 0){
-
+					cards.each(function(){
+						//console.log(this);
+						// move card to staging
+						$('.col[data-ord=0] .cards').append(this);
+						var thiscard = $(this);
+						var req = '';
+						req = req + 'card[col_id]='+stagingcolid;
+						req = req + '&_method=put';
+						$.post('/cards/'+thiscard.attr('data-card'),req,function(resp){
+							console.log(resp);
+						});
+						$(this).attr('data-thiscol',stagingcolid);
+					});
+					updateCardSortOrder('.col[data-ord=0] .cards');
 				}
 			}
-		},{cancel: 'Keep it',ok: 'Delete it'});
+		},{cancel: 'cancel',ok: 'delete'});
 		return false;
 	});
 
@@ -143,17 +157,17 @@ $('.action-add-staging').click(function(){
 					req = req + '&_method=put';
 					$.post('/cols/'+thiscol.attr('data-col'),req);
 				}
-			}, 3000 );
+			}, 2000 );
 		}
 	});
 
 	/* column move left */
 	$(document).on('click','.col-move-left',function(){
 		var colid = $(this).closest('.col').attr('data-col');
-		console.log('colid: '+colid);
+		//console.log('colid: '+colid);
 		var colobj = $('.col[data-col='+colid+']');
 		var prevcol = $('.col[data-col='+colid+']').prev();
-		console.log('prev: '+prevcol.attr('data-col'));
+		//console.log('prev: '+prevcol.attr('data-col'));
 		$(prevcol).before(colobj);
 		updateColSortOrder('.cols');
 		$('.col .col-ctrl .col-move-left').each(function(){
@@ -165,10 +179,10 @@ $('.action-add-staging').click(function(){
 	/* column move right */
 	$(document).on('click','.col-move-right',function(){
 		var colid = $(this).closest('.col').attr('data-col');
-		console.log('colid: '+colid);
+		//console.log('colid: '+colid);
 		var colobj = $('.col[data-col='+colid+']');
 		var nextcol = $('.col[data-col='+colid+']').next();
-		console.log('prev: '+nextcol.attr('data-col'));
+		//console.log('prev: '+nextcol.attr('data-col'));
 		$(nextcol).after(colobj);
 		updateColSortOrder('.cols');
 		$('.col .col-ctrl .col-move-left').each(function(){
@@ -178,37 +192,38 @@ $('.action-add-staging').click(function(){
 	});
 
 /* Card Functions */
-
+	function makeSortable(){
 	// cards jq-ui sortable
-	$( ".cards" ).sortable({
-	      connectWith: ".cards",
-	      handle: ".card-move",
-	      stop: function( event, ui ) {
-	      	var cardid = ui.item.context.dataset.card;
-	      	//console.log('card: '+cardid);
-	      	var col = $('.card[data-card='+cardid+']').closest('.col').attr('data-col');
-	      	//console.log('col: '+col);
-	      	var ord = $('.cards .card').index($('.card[data-card='+cardid+']'));
-	      	//console.log('ord: '+ord);
-	      	var req = '';
-	      	// update card that moved
-	      	req = req + 'card[id]='+cardid;
-	      	req = req + '&card[col_id]='+col;
-	      	req = req + '&_method=put';
-	      	$.post('/cards/'+cardid,req);
+		$( ".cards" ).sortable({
+		      connectWith: ".cards",
+		      handle: ".card-move",
+		      stop: function( event, ui ) {
+		      	var cardid = ui.item.context.dataset.card;
+		      	//console.log('card: '+cardid);
+		      	var col = $('.card[data-card='+cardid+']').closest('.col').attr('data-col');
+		      	//console.log('col: '+col);
+		      	var ord = $('.cards .card').index($('.card[data-card='+cardid+']'));
+		      	//console.log('ord: '+ord);
+		      	var req = '';
+		      	// update card that moved
+		      	req = req + 'card[id]='+cardid;
+		      	req = req + '&card[col_id]='+col;
+		      	req = req + '&_method=put';
+		      	$.post('/cards/'+cardid,req);
 
-	      	// update all target ords
-	      	var sortparent = $('.card[data-card='+cardid+']').closest('.cards');
-	      	updateCardSortOrder(sortparent);
+		      	// update all target ords
+		      	var sortparent = $('.card[data-card='+cardid+']').closest('.cards');
+		      	updateCardSortOrder(sortparent);
 
-	      	// update source col ords
-	      	var oldcol = $('.card[data-card='+cardid+']').attr('data-thiscol');
-	      	console.log(oldcol);
-	      	updateCardSortOrder('.col[data-col='+oldcol+'] .cards');
-			$('.card[data-card='+cardid+']').attr('data-thiscol',col);
-	      }
-	});
-	$( ".cards" ).disableSelection();
+		      	// update source col ords
+		      	var oldcol = $('.card[data-card='+cardid+']').attr('data-thiscol');
+		      	//console.log(oldcol);
+		      	updateCardSortOrder('.col[data-col='+oldcol+'] .cards');
+				$('.card[data-card='+cardid+']').attr('data-thiscol',col);
+		      }
+		});
+		$( ".cards" ).disableSelection();
+	}
 
 	function updateColSortOrder(parent){
 		var ord = 1;
@@ -247,7 +262,7 @@ $('.action-add-staging').click(function(){
 	})();
 
 	// add a card
-	$('.action-add-card').click(function(){
+	$(document).on('click','.action-add-card',function(){
 		var col = $(this).closest('.col').attr('data-col');
 		var req = '';
 		req = req + 'col='+col;
@@ -258,17 +273,18 @@ $('.action-add-staging').click(function(){
 	});
 
 	// delete card
-	$('.action-delete-card').click(function(){
+	$(document).on('click','.action-delete-card',function(){
+		var dellink = $(this);
 		smoke.confirm('Delete this card? Are you sure?',function(e){
 			if(e){
-				var card = $(this).closest('.card');
-				var cardid = $(this).closest('.card').attr('data-card');
+				var card = dellink.closest('.card');
+				var cardid = dellink.closest('.card').attr('data-card');
 				//console.log(cardid);
 				$.post('/cards/'+cardid,'_method=delete',function(){
 					card.closest('.card').remove();
 				});
 			}
-		},{cancel: 'Keep it',ok: 'Delete it'});
+		},{cancel: 'cancel',ok: 'delete it'});
 		return false;
 	});
 
@@ -285,6 +301,7 @@ $('.action-add-staging').click(function(){
 					// update
 					req = req + '&_method=put';
 					$.post('/cards/'+thiscard.attr('data-card'),req);
+					console.log('card updated');
 				}else{
 					// defaults
 					req = req + '&card[col_id]='+col;
@@ -295,12 +312,39 @@ $('.action-add-staging').click(function(){
 						thiscard.attr('data-card',resp.id);
 						col = thiscard.closest('.col').attr('data-col');
 						thiscard.attr('data-thiscol',col);
+						console.log('card saved');
 					});
 				}
-			}, 3000 );
+			},2000);
 		}
 	});
 
+	// card color
+	$(document).on('click','.action-color-card',function(){
+		$(this).closest('.card').children().find('.card-colors').toggle();
+	});
+
+	// card color change
+	$(document).on('click','.card-color-item',function(){
+		var thiscolor = $(this);
+		var thiscard = $(this).closest('.card');
+		var thisctrl = $(this).closest('.card-ctrl');
+		var colors = $(this).siblings();
+		//console.log(colors);
+		$.each(colors,function(index,color){
+			if(thisctrl.hasClass($(color).attr('rel'))){
+				thisctrl.removeClass($(color).attr('rel'));
+			}
+		});
+		thisctrl.addClass($(thiscolor).attr('rel'));
+		var req = '';
+		req = req + '_method=put';
+		req = req + '&card[color]='+$(thiscolor).attr('rel');
+		$.post('/cards/'+thiscard.attr('data-card'),req);
+		thiscard.children().find('.card-colors').toggle();
+	});
+
+	// card textarea auto-resize
 	$('.card-text').on( 'keyup', 'textarea', function (){
 	    $(this).height( 0 );
 	    $(this).height( this.scrollHeight );

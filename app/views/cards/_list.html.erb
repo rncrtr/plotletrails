@@ -2,15 +2,27 @@
 <div class="cards">
 	<% cards.each do |card| %>
 		<div class="card" data-card="<%= card.id %>" data-thiscol="<%= card.col_id %>">
-			<div class="card-ctrl blue rnd5top">&nbsp;
+			<div class="card-ctrl <%= card.color %> rnd5top">&nbsp;
 				<div class="ctrl-left">
 					<div class="card-del pointer action-delete-card"><i class="icon-trash icon-white"></i></div>
 					<div class="card-title">&nbsp;</div>
 				</div>
 				<div class="ctrl-right">
+					<div class="card-color pointer action-color-card"><i class="icon-flag icon-white"></i></div>
 					<div class="card-move pointer"><i class="icon-move icon-white"></i></div>
 				</div>
+				<div class="card-colors">
+					<div class="card-color-item pointer gray" rel="gray">&nbsp;</div>
+					<div class="card-color-item pointer red" rel="red">&nbsp;</div>
+					<div class="card-color-item pointer orange" rel="orange">&nbsp;</div>
+					<div class="card-color-item pointer yellow" rel="yellow">&nbsp;</div>
+					<div class="card-color-item pointer green" rel="green">&nbsp;</div>
+					<div class="card-color-item pointer blue" rel="blue">&nbsp;</div>
+					<div class="card-color-item pointer pink" rel="pink">&nbsp;</div>
+					<div class="card-color-item pointer purple" rel="purple">&nbsp;</div>
+				</div>
 			</div>
+			
 			<div class="card-text rnd5bottom"><%= text_area_tag "", card.text %></div>
 		</div>
 	<% end %>
